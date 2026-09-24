@@ -1,5 +1,6 @@
 ---
 title: "Limpieza y corrección de la base de datos almac_sangre"
+author: Aguirre Guiosef y De la Cruz Lucia 
 format: html
 editor: visual
 ---
