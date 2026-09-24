@@ -1,6 +1,5 @@
 ---
 title: "Limpieza y corrección de la base de datos almac_sangre"
-author: Aguirre Guiosef y De la Cruz Lucia 
 format: html
 editor: visual
 ---
@@ -100,3 +99,21 @@ data_almac_sangre_3 = mutate_if(
 ```
 
 La función `remove_empty()` permite eliminar filas o columnas que estén completamente vacías.
+
+# 6 Inspección de variables categóricas
+
+Las variables categóricas se revisan para identificar sus diferentes niveles, posibles errores de escritura y valores perdidos.
+
+La función `table()` muestra la frecuencia de cada categoría. El argumento `useNA = "ifany"` permite mostrar también los valores `NA` cuando existen.
+
+## 6.1 Grupo de edad
+
+```{r}
+table(data_almac_sangre_4$grupo_edad_gr, useNA = "ifany")
+```
+
+## 6.2 Raza afroamericana
+
+```{r}
+table(data_almac_sangre_4$raza_afroamericana, useNA = "ifany")
+```
