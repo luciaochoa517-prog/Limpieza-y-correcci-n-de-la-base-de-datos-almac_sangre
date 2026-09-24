@@ -1,0 +1,101 @@
+---
+title: "Limpieza y corrección de la base de datos almac_sangre"
+format: html
+editor: visual
+---
+
+# 1 Paquetes y base de datos
+
+Para realizar la inspección, limpieza y transformación de la base de datos se utilizarán los paquetes `tidyverse`, `janitor`, `rio` y `here`, que fueron empleados durante la práctica de clase.
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(rio)
+library(here)
+```
+
+A continuación, se importa la base de datos asignada al equipo desde la carpeta `data` del proyecto.
+
+```{r}
+data_almac_sangre = import(here("data", "almac_sangre.csv"))
+```
+
+# 2 Conversión de la base a tibble
+
+La función `as_tibble()` permite convertir la base de datos en un objeto tipo *tibble*. Este formato facilita la visualización y el manejo de las variables con las funciones del paquete `tidyverse`.
+
+Se conserva la base original y se crea un nuevo objeto para comenzar el proceso de limpieza.
+
+```{r}
+data_almac_sangre_1 = as_tibble(data_almac_sangre)
+class(data_almac_sangre_1)
+```
+
+# 3 Inspección inicial de la base de datos
+
+## 3.1 Número de observaciones y variables
+
+Antes de modificar la base se revisan sus dimensiones. La función `dim()` muestra primero el número de observaciones o filas y luego el número de variables o columnas.
+
+```{r}
+dim(data_almac_sangre_1)
+```
+
+## 3.2 Estructura de las variables
+
+Las funciones `str()` y `glimpse()` permiten observar la estructura de la base, los nombres de las variables, el tipo de dato de cada una y algunos de sus valores.
+
+```{r}
+str(data_almac_sangre_1)
+```
+
+```{r}
+glimpse(data_almac_sangre_1)
+```
+
+La función `View()` permite observar la base completa en una pestaña de RStudio para realizar una inspección visual.
+
+```{r}
+View(data_almac_sangre_1)
+```
+
+# 4 Limpieza de los nombres de las variables
+
+Los nombres originales de las variables presentan letras mayúsculas. Para estandarizarlos se utiliza la función `clean_names()` del paquete `janitor`.
+
+Esta función convierte los nombres a minúsculas y utiliza guiones bajos para separar las palabras.
+
+Primero se observan los nombres originales.
+
+```{r}
+names(data_almac_sangre_1)
+```
+
+Luego se aplica la limpieza de nombres.
+
+```{r}
+data_almac_sangre_2 = clean_names(data_almac_sangre_1)
+```
+
+Se muestran nuevamente los nombres para comprobar el cambio.
+
+```{r}
+names(data_almac_sangre_2)
+```
+
+# 5 Revisión de valores vacíos y datos perdidos
+
+Antes de continuar con la limpieza, los espacios vacíos de las variables de tipo texto se convierten a `NA`. En R, `NA` representa un valor perdido.
+
+Para ello se utiliza `mutate_if()` junto con `na_if()`.
+
+```{r}
+data_almac_sangre_3 = mutate_if(
+  data_almac_sangre_2,
+  is.character,
+  list(~na_if(., ""))
+)
+```
+
+La función `remove_empty()` permite eliminar filas o columnas que estén completamente vacías.
